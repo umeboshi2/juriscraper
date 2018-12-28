@@ -3,7 +3,7 @@ import re
 import requests
 import tldextract
 from lxml import html
-from six import string_types
+from six import string_types, text_type
 
 from ..lib.string_utils import force_unicode
 
@@ -35,7 +35,7 @@ def get_pacer_case_id_from_docket_url(url):
     Out: 56120
     In: https://ecf.azb.uscourts.gov/cgi-bin/iquery.pl?625371913403797-L_9999_1-0-663150
     Out: 663150
-    """
+    """ # noqa
     param = url.split('?')[1]
     if 'L' in param:
         return param.rsplit('-', 1)[1]
@@ -104,8 +104,8 @@ def reverse_goDLS_function(s):
       'hdr': '',
     }
 
-    The key names correspond to the form field names in the JavaScript on PACER,
-    but we don't actually know what each of these values does. Our best
+    The key names correspond to the form field names in the JavaScript on
+    PACER, but we don't actually know what each of these values does. Our best
     speculation is:
 
      - form_post_url: Where the form is posted to. The HTML 'action' attribute.
@@ -116,16 +116,16 @@ def reverse_goDLS_function(s):
        immediately direct you to the page where the PDF is embedded in an
        iframe.
      - pdf_header: Can be either 1 or 2. 1: Show the header. 2: No header.
-     - pdf_toggle_possible: This seems to always be 1. Could be that some courts
-       do not allow the header to be turned off, but we haven't discoered that
-       yet.
+     - pdf_toggle_possible: This seems to always be 1. Could be that some
+       courts do not allow the header to be turned off, but we haven't
+       discoered that yet.
      - magic_num: This is used for the "One free look" downloads.
      - hdr: Unclear what HDR stands for but on items that have attachments,
        passing this parameter bypasses the download attachment screen and takes
        you directly to the PDF that you're trying to download. For an example,
-       see document 108 from 1:12-cv-00102 in tnmd, which is a free opinion that
-       has an attachment. Note that the eighth parameter was added some time
-       after 2010. Dockets older than that date only have seven responses.
+       see document 108 from 1:12-cv-00102 in tnmd, which is a free opinion
+       that has an attachment. Note that the eighth parameter was added some
+       time after 2010. Dockets older than that date only have seven responses.
     """
     args = re.findall("\'(.*?)\'", s)
     parts = {
@@ -170,8 +170,8 @@ def get_nonce_from_form(r):
     found.
 
     :param r: The response object you wish to parse.
-    :returns A nonce object that can be used to query PACER or None, if no nonce
-    can be found.
+    :returns A nonce object that can be used to query PACER or None, if no
+    nonce can be found.
     """
     tree = html.fromstring(r.text)
     form_attrs = tree.xpath('//form//@action')
@@ -203,10 +203,10 @@ def clean_pacer_object(obj):
     :return: A dict or list with the string values cleaned.
     """
     if isinstance(obj, list):
-        l = []
+        ls = []
         for i in obj:
-            l.append(clean_pacer_object(i))
-        return l
+            ls.append(clean_pacer_object(i))
+        return ls
     elif isinstance(obj, dict):
         d = {}
         for k, v in obj.items():
@@ -224,19 +224,21 @@ BASE_IA_URL = "https://www.archive.org/download"
 
 
 def get_bucket_name(court, pacer_case_id):
-    bucketlist = ["gov", "uscourts", court, unicode(pacer_case_id)]
+    bucketlist = ["gov", "uscourts", court, text_type(pacer_case_id)]
     return ".".join(bucketlist)
 
 
 def get_docket_filename(court, pacer_case_id):
-    return ".".join(["gov", "uscourts", unicode(court), unicode(pacer_case_id),
+    return ".".join(["gov", "uscourts", text_type(court),
+                     text_type(pacer_case_id),
                      "docket.xml"])
 
 
 def get_document_filename(court, pacer_case_id, document_number,
                           attachment_number):
-    return ".".join(["gov", "uscourts", unicode(court), unicode(pacer_case_id),
-                     unicode(document_number), unicode(attachment_number or 0),
+    return ".".join(["gov", "uscourts", text_type(court),
+                     text_type(pacer_case_id), text_type(document_number),
+                     text_type(attachment_number or 0),
                      "pdf"])
 
 

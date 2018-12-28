@@ -18,15 +18,15 @@ from ..lib.string_utils import clean_string, harmonize
 logger = make_default_logger()
 
 """
-As of 2018-04-25, the jurisdictions below do not have functional RSS feeds. I 
+As of 2018-04-25, the jurisdictions below do not have functional RSS feeds. I
 reached out to all of these jurisdictions and heard back the following:
- 
+
  - miwb: Sent email. Left a VM.
- - nceb: "The Judges in our District have given direction that they do not want 
-   the RSS feed turned on in our court.  This has been discussed several times 
-   and their decision remains the same."
-    - Update via email: "At this time, the court declined to participate.  
-      However, the court anticipates transitioning to the NextGen version of 
+ - nceb: "The Judges in our District have given direction that they do not
+   want the RSS feed turned on in our court.  This has been discussed several
+   times and their decision remains the same."
+    - Update via email: "At this time, the court declined to participate.
+      However, the court anticipates transitioning to the NextGen version of
       CM/ECF in 2019 and will likely participate at that time.
  - nmib (Northern Mariana Islands, 17 hours ahead): Sent email.
  - alnd: Sent email.
@@ -34,36 +34,36 @@ reached out to all of these jurisdictions and heard back the following:
  - flnd: Sent email.
  - gand: Left a message at the "Systems" department
  - gasd: Sent email.
- - hid: Sent email. 808-541-1304, Lian Abernathy, Chief Deputy 
+ - hid: Sent email. 808-541-1304, Lian Abernathy, Chief Deputy
  - ilsd: Sent email.
  - kyed: Need to call Sharon Drolijk (Operations Manager) at (859) 233-2503.
- - mdd: Spoke with "Attorney Adviser". He asked for a letter, which I sent. He 
-   will take it up with the court, though they didn't have any policy that he 
-   was aware of. It's going through their "court committee system for 
+ - mdd: Spoke with "Attorney Adviser". He asked for a letter, which I sent. He
+   will take it up with the court, though they didn't have any policy that he
+   was aware of. It's going through their "court committee system for
    consideration." Seems it wasn't done for performance reasons years ago. They
    will take it up again.
  - msnd: Sent email.
- - mtd: Julie Collins, Deputy Clerk in charge of Billings division, called back. 
-   She's going to look into it.
- - ndd: Sent email. 701-530-2313, Clerk of Clerk, Rob. On the to do list. 
+ - mtd: Julie Collins, Deputy Clerk in charge of Billings division, called
+   back.  She's going to look into it.
+ - ndd: Sent email. 701-530-2313, Clerk of Clerk, Rob. On the to do list.
    Hopefully by end of the year (2018). Nobody ever asked before.
- - nvd: Sent email. Talked to Robert in "Quality Control". He shook me a bit 
-   with how difficult he was. He insists I need to send a letter to the chief 
+ - nvd: Sent email. Talked to Robert in "Quality Control". He shook me a bit
+   with how difficult he was. He insists I need to send a letter to the chief
    judge, but that they're not considering this currently.
-    - A different tack: Trying the operations manager, Lia at 775-686-5840. 
+    - A different tack: Trying the operations manager, Lia at 775-686-5840.
       She's friendly. Requested a letter for chief judge. Sent.
  - nywd: Sent email.
  - oked: Sent email.
  - oknd: Sent email.
  - pamd: Sent email.
- - scd: "We have forwarded your request on to management staff at the District 
-   Court for further consideration." 
+ - scd: "We have forwarded your request on to management staff at the District
+   Court for further consideration."
  - tnwd: Sent email.
- - txnd: Left me a long voicemail. They're working on it and have it in 
-   committee. Expectation is that they may require an en banc meeting of the 
-   judges to make a decision, but that the decision should come soon and be 
+ - txnd: Left me a long voicemail. They're working on it and have it in
+   committee. Expectation is that they may require an en banc meeting of the
+   judges to make a decision, but that the decision should come soon and be
    positive.
- - vaed: "We are currently looking into this and will possibly have this 
+ - vaed: "We are currently looking into this and will possibly have this
    feature in the near future."
 
 """
