@@ -34,10 +34,10 @@ class Site(OralArgumentSite):
     def __init__(self, *args, **kwargs):
         super(Site, self).__init__(*args, **kwargs)
         self.court_id = self.__module__
-        self.url = 'http://www.courts.state.md.us/coappeals/webcasts/webcastarchive.html'
+        self.url = 'http://www.courts.state.md.us/coappeals/webcasts/webcastarchive.html' # noqa
 
     def _get_download_urls(self):
-        path = "//table//tr/td[2]/strong/a/@href[not(contains(., 'baradmissions'))]"
+        path = "//table//tr/td[2]/strong/a/@href[not(contains(., 'baradmissions'))]" # noqa
         # This works because they usually link on docket number, but there's
         # one page where the audio must have been long and they link instead
         # on 'Part 1' and 'Part 2'. That sort of irregularity is not handled.
@@ -45,7 +45,7 @@ class Site(OralArgumentSite):
 
     def _get_case_dates(self):
         dates = []
-        path = "//table/tr[not(contains(.//@href, 'baradmission'))]/td[1]/text()"
+        path = "//table/tr[not(contains(.//@href, 'baradmission'))]/td[1]/text()" # noqa
         for s in self.html.xpath(path):
             for date_format in ('%m-%d-%Y', '%m-%d-%y'):
                 try:
@@ -56,8 +56,9 @@ class Site(OralArgumentSite):
         return dates
 
     def _get_case_names(self):
-        # To avoid the "Title" rows we find the siblings of the rows with links.
-        path = '//table//tr/td[2]/strong/a/../../following-sibling::td/strong/text()'
+        # To avoid the "Title" rows we find the siblings
+        # of the rows with links.
+        path = '//table//tr/td[2]/strong/a/../../following-sibling::td/strong/text()' # noqa
         cases = []
         for case in self.html.xpath(path):
             if case.strip():
@@ -67,5 +68,5 @@ class Site(OralArgumentSite):
     def _get_docket_numbers(self):
         # This works except for on the page where one of the recordings was
         # split into Part 1 and Part 2.
-        path = "//table//tr/td[2]/strong/a/text()[not(contains(., 'Admissions'))]"
+        path = "//table//tr/td[2]/strong/a/text()[not(contains(., 'Admissions'))]" # noqa
         return list(self.html.xpath(path))

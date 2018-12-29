@@ -14,7 +14,7 @@ class Site(ill.Site):
     def __init__(self, *args, **kwargs):
         super(Site, self).__init__(*args, **kwargs)
         self.court_id = self.__module__
-        self.url = 'http://www.illinoiscourts.gov/Media/Appellate/3rd_District.asp'
+        self.url = 'http://www.illinoiscourts.gov/Media/Appellate/3rd_District.asp' # noqa
         self.download_url_path = '/td[5]//@href'
         self.case_name_path = '/td[3]'
         self.docket_number_path = "/td[2]"

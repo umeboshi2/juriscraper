@@ -1,3 +1,4 @@
+from __future__ import print_function
 import pprint
 import re
 import sys
@@ -33,14 +34,20 @@ class AppellateDocketReport(BaseDocketReport, BaseReport):
 
     ERROR_STRINGS = BaseReport.ERROR_STRINGS + [
         r'The link to this page may not have originated from within CM/ECF.',
-        r'Click on the "Accept Charges and Retrieve" button ONCE at the bottom '
-        r'of this page to download the document image.',
+
+        r'Click on the "Accept Charges and Retrieve" button ONCE at the '
+        r'bottom of this page to download the document image.',
+
         r'<embed width="100%" height="100%" name="plugin" id="plugin"',
-        r'Access to the document you are about to view has been restricted.*Do '
-        r'not allow it to be seen by unauthorized persons.',
+
+        r'Access to the document you are about to view has been '
+        r'restricted.*Do not allow it to be seen by unauthorized persons.',
         r'document.location\s*=\s*"https://pacer.login.uscourts.gov',
+
         r'http-equiv="REFRESH"',
+
         r'Case Number Not Found</b>',
+
         r'<title>404 Not Found</title>',
     ]
 
@@ -695,19 +702,21 @@ class AppellateDocketReport(BaseDocketReport, BaseReport):
                 return convert_date_string(tail)
             return tail
 
+
 def _main():
     if len(sys.argv) != 2:
-        print "Usage: python -m juriscraper.pacer.appellate_docket filepath"
-        print "Please provide a path to an HTML file to parse."
+        print("Usage: python -m juriscraper.pacer.appellate_docket filepath")
+        print("Please provide a path to an HTML file to parse.")
         sys.exit(1)
     report = AppellateDocketReport(
         'ca9')  # Court ID is only needed for querying.
     filepath = sys.argv[1]
-    print "Parsing HTML file at %s" % filepath
+    print("Parsing HTML file at {}".format(filepath))
     with open(filepath, 'r') as f:
         text = f.read().decode('utf-8')
     report._parse_text(text)
     pprint.pprint(report.data, indent=2)
+
 
 if __name__ == "__main__":
     _main()
