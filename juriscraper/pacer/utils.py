@@ -44,7 +44,7 @@ def get_pacer_case_id_from_docket_url(url):
 
 def get_pacer_seq_no_from_doc1_url(url):
     """Extract the seq_no from the doc1 URL."""
-    match = re.search('de_seq_num=(\d+)', url)
+    match = re.search(r'de_seq_num=(\d+)', url)
     if match:
         return match.group(1)
     else:
@@ -215,7 +215,7 @@ def clean_pacer_object(obj):
     elif isinstance(obj, string_types):
         s = ' '.join(obj.strip().split())
         s = force_unicode(s)
-        return re.sub('\s+,', ',', s)
+        return re.sub(r'\s+,', ',', s)
     else:
         return obj
 

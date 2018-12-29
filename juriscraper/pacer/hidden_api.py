@@ -51,14 +51,15 @@ class PossibleCaseNumberApi(BaseReport):
         query. If a case name is provided, and more than one case is returned,
         we will try to identify the most similar case.
         :param office_number: The office number where the item was litigated.
-        Usually, this will show up as part of the extended docket number, before
-        the colon. For example, in this instance the office number is 2:
+        Usually, this will show up as part of the extended docket number,
+        before the colon.
+        For example, in this instance the office number is 2:
         2:16-cr-01152-JZB. Sometimes we know the office number, for example, if
         we're using the IDB. Note that office "numbers" can sometimes be
         a letter. The numbering appears to be 1-9, then A-Z.
         :param docket_number_letters: Sometimes you'll know the letters that
-        should be in the returned docket number. For example, they might be 'cr'
-        or 'cv'. If you do, you can add this parameter to help filter the
+        should be in the returned docket number. For example, they might be
+        'cr' or 'cv'. If you do, you can add this parameter to help filter the
         possible results based on the docket numbers returned.
         For example, if you set this to "cv", and you get back two results:
           2:16-cr-01152-JZB
@@ -103,7 +104,7 @@ class PossibleCaseNumberApi(BaseReport):
 
             if len(nodes) > 1 and docket_number_letters is not None:
                 # Remove items by docket number, if they have cv or cr.
-                f = lambda node: docket_number_letters in node.xpath('./@number')[0]
+                f = lambda node: docket_number_letters in node.xpath('./@number')[0] # noqa (should def be used?)
                 nodes = filter(f, nodes)
 
             if len(nodes) > 1:
@@ -128,7 +129,8 @@ class PossibleCaseNumberApi(BaseReport):
                     # The IDs are not sequential. Can't use this technique.
                     pass
                 else:
-                    nodes = self.tree.xpath('//case[%s=%s]' % (attribute, ids[0]))
+                    path_expr = '//case[%s=%s]' % (attribute, ids[0])
+                    nodes = self.tree.xpath(path_expr)
 
             if len(nodes) > 1 and case_name is not None:
                 # Disambiguate the possible case nodes to find the best one.
@@ -157,8 +159,8 @@ class PossibleCaseNumberApi(BaseReport):
             return {
                 u'docket_number': force_unicode(node.xpath('./@number')[0]),
                 u'pacer_case_id': force_unicode(node.xpath('./@id')[0]),
-                # This could be further post processed to pull out the date closed
-                # and a cleaner title.
+                # This could be further post processed to pull out the date
+                # closed and a cleaner title.
                 u'title': force_unicode(node.xpath('./@title')[0]),
             }
         else:
@@ -220,4 +222,5 @@ class ShowCaseDocApi(BaseReport):
         if 'doc1' in url:
             return get_pacer_doc_id_from_doc1_url(url)
         else:
-            raise ParsingException("Unable to get doc1-style URL. Instead got %s" % url)
+            msg = "Unable to get doc1-style URL. Instead got {}".format(url)
+            raise ParsingException(msg)

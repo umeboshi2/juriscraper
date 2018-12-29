@@ -3,6 +3,7 @@ import re
 
 from lxml import etree
 from lxml.html import HtmlElement
+import six
 from six.moves.urllib.parse import urljoin
 
 from .utils import make_doc1_url, is_pdf
@@ -21,23 +22,25 @@ logger = make_default_logger()
 def re_xpath(self, path):
     return self.xpath(path, namespaces={
         're': 'http://exslt.org/regular-expressions'})
+
+
 HtmlElement.re_xpath = re_xpath
 
 
 class BaseReport(object):
     """A base report for working with pages on PACER."""
 
-    REDIRECT_REGEX = re.compile('window\.\s*?location\s*=\s*"(.*)"\s*;')
+    REDIRECT_REGEX = re.compile(r'window\.\s*?location\s*=\s*"(.*)"\s*;')
 
     # Subclasses should override PATH
     PATH = ''
 
     # Strings below (and in subclasses) are used to identify HTML that should
-    # not be parsed or processed for a variety of reasons. Spaces in the strings
-    # below are converted to \s whitespace searches using regexes.
+    # not be parsed or processed for a variety of reasons. Spaces in the
+    # strings below are converted to \s whitespace searches using regexes.
     ERROR_STRINGS = [
         "MetaMask.*web3",
-        'console\.log\(".*CloudMask',
+        r'console\.log\(".*CloudMask',
     ]
 
     def __init__(self, court_id, pacer_session=None):
@@ -53,7 +56,8 @@ class BaseReport(object):
         if self.court_id == 'psc':
             return "https://dcecf.psc.uscourts.gov/%s" % self.PATH
         else:
-            return "https://ecf.%s.uscourts.gov/%s" % (self.court_id, self.PATH)
+            url = "https://ecf.%s.uscourts.gov/%s" % (self.court_id, self.PATH)
+            return url
 
     def query(self, *args, **kwargs):
         """Query PACER and set self.response with the response."""
@@ -81,7 +85,7 @@ class BaseReport(object):
         :param text: A unicode object
         :return: None
         """
-        assert isinstance(text, unicode), \
+        assert isinstance(text, six.text_type), \
             "Input must be unicode, not %s" % type(text)
         text = clean_html(text)
         self.check_validity(text)
@@ -97,7 +101,7 @@ class BaseReport(object):
         Set self.is_valid flag to True or False
         """
         for error_string in self.ERROR_STRINGS:
-            error_string_re = re.compile('\s+'.join(error_string.split()),
+            error_string_re = re.compile(r'\s+'.join(error_string.split()),
                                          flags=re.I)
             if error_string_re.search(text):
                 self.is_valid = False
@@ -133,16 +137,17 @@ class BaseReport(object):
             return None
 
         # Some pacer sites use window.location in their JS, so we have to look
-        # for that. See: oknd, 13-cv-00357-JED-FHM, doc #24. But, be warned, you
-        # can only catch the redirection with JS off.
+        # for that. See: oknd, 13-cv-00357-JED-FHM, doc #24. But, be warned,
+        # you can only catch the redirection with JS off.
         m = self.REDIRECT_REGEX.search(r.text)
         if m is not None:
             r = self.session.get(urljoin(url, m.group(1)))
             r.raise_for_status()
 
         # The request above sometimes generates an HTML page with an iframe
-        # containing the PDF, and other times returns the PDF directly. ∴ either
-        # get the src of the iframe and download the PDF or just return the pdf.
+        # containing the PDF, and other times returns the PDF directly.
+        # ∴ either get the src of the iframe and download the PDF or
+        #   just return the pdf.
         r.raise_for_status()
         if is_pdf(r):
             logger.info('Got PDF binary data for case %s at: %s' % (url, data))
@@ -160,8 +165,9 @@ class BaseReport(object):
                              "directly in HTML. URL: %s, caseid: %s" %
                              (url, pacer_case_id))
             else:
-                logger.error("Unable to download PDF. PDF not served as binary "
-                             "data and unable to find iframe src attribute. "
+                logger.error("Unable to download PDF. PDF not served as "
+                             "binary data and unable to find iframe src "
+                             "attribute. "
                              "URL: %s, caseid: %s" % (url, pacer_case_id))
             return None
 

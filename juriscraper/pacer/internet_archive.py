@@ -1,6 +1,7 @@
 # coding=utf-8
 from lxml import etree
 from requests import Session
+import six
 
 from .docket_report import BaseDocketReport
 from .docket_utils import normalize_party_types
@@ -67,7 +68,7 @@ class InternetArchive(BaseDocketReport):
         self._parse_text(self.response.text)
 
     def _parse_text(self, text):
-        assert isinstance(text, unicode), \
+        assert isinstance(text, six.text_type), \
             "Input must be unicode, not %s" % type(text)
         self.tree = etree.fromstring(text.encode('utf-8'), self.parser)
 
@@ -221,4 +222,3 @@ class InternetArchive(BaseDocketReport):
         if not case_name:
             return u"Unknown Case Title"
         return case_name
-

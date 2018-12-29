@@ -159,7 +159,7 @@ class PacerSession(requests.Session):
 
         If you get a 302 response and the proper cookies at this point, that
         means you're logged in.
-        """
+        """ # noqa
         logger.info(u'Attempting PACER site login')
         if url is None:
             url = self.LOGIN_URL
@@ -248,7 +248,8 @@ class PacerSession(requests.Session):
 
         valid_case_number_query = '<case number=' in r.text or \
             "<request number=" in r.text
-        no_results_case_number_query = re.search('<message.*Cannot find', r.text)
+        no_results_case_number_query = re.search('<message.*Cannot find',
+                                                 r.text)
         sealed_case_query = re.search('<message.*Case Under Seal', r.text)
         if any([valid_case_number_query, no_results_case_number_query,
                 sealed_case_query]):
@@ -276,7 +277,7 @@ class PacerSession(requests.Session):
             self.login()
             return True
         else:
-            msg = (u"Invalid/expired PACER session and do not have credentials "
-                   u"for re-login.")
+            msg = (u"Invalid/expired PACER session and do not have "
+                   u"credentials for re-login.")
             logger.error(msg)
             raise PacerLoginException(msg)

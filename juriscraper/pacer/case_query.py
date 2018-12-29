@@ -6,6 +6,8 @@ presents some more information for BK cases.
 import pprint
 import sys
 
+import six
+
 from .docket_report import BaseDocketReport
 from .reports import BaseReport
 from .utils import clean_pacer_object
@@ -136,7 +138,7 @@ class CaseQuery(BaseDocketReport, BaseReport):
             u'judge': u'assigned_to_str',
             u'plan_confirmed': u'date_plan_confirmed',
         }
-        for i in xrange(1, len(rows)-1):
+        for i in six.range(1, len(rows)-1):
             bolds = rows[i].findall('.//b')
             if not bolds:
                 if i == 1:
@@ -228,7 +230,7 @@ class CaseQuery(BaseDocketReport, BaseReport):
          - The CASE_NUM cookie isn't needed.
          - The case_num parameter needs a value; any value will do.
          - As usual, the ?1-L_1_0-1 business in the URL is needed
-        """
+        """ # noqa
         assert self.session is not None, \
             "session attribute of DocketReport cannot be None."
         assert bool(pacer_case_id), \

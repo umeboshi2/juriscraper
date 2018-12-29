@@ -21,7 +21,8 @@ class DocketHistoryReport(DocketReport):
     date_filed_regex = re.compile(r'[fF]iled:\s+(%s)' % date_regex)
     date_last_filing_regex = re.compile(r'last\s+filing:\s+(%s)' % date_regex,
                                         flags=re.IGNORECASE)
-    date_filed_and_entered_regex = re.compile(r'& Entered:\s+(%s)' % date_regex)
+    date_filed_and_entered_regex = re.compile(
+        r'& Entered:\s+(%s)' % date_regex)
 
     PATH = 'cgi-bin/HistDocQry.pl'
 
@@ -85,7 +86,8 @@ class DocketHistoryReport(DocketReport):
 
         if query_type not in [u'History', u'Documents']:
             raise ValueError(u"Invalid value for 'query_type' parameter.")
-        if show_de_descriptions is not True and show_de_descriptions is not False:
+        if show_de_descriptions is not True \
+           and show_de_descriptions is not False:
             raise ValueError(u"")
         if order_by not in ['asc', 'desc']:
             raise ValueError(u"Invalid value for 'order_by' parameter.")
