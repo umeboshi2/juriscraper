@@ -143,7 +143,8 @@ class DocketHistoryReport(DocketReport):
                     de[u'pacer_doc_id'] = None
                     de[u'pacer_seq_no'] = None
                 de[u'date_filed'] = self._get_date_filed(cells[1])
-                de[u'short_description'] = force_unicode(cells[2].text_content())
+                sdesc = force_unicode(cells[2].text_content())
+                de[u'short_description'] = sdesc
                 de[u'description'] = u''
                 docket_entries.append(de)
             elif len(cells) == 1:

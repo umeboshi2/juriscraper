@@ -164,6 +164,7 @@ class BaseDocketReport(object):
         return [s.strip() for s in text.split(sep) if s]
 
     BR_REGEX = r'(?i)<br\s*/?>'
+
     @staticmethod
     def redelimit_p(target_element, delimiter_re):
         """Redelimit the children of the target element with <p> tags.
@@ -783,9 +784,9 @@ class DocketReport(BaseDocketReport, BaseReport):
         footer_multi_doc = 'not(.//text()[contains(., "Footer format:")])'
         docket_entry_rows = self.tree.xpath(
             '//table'
-              '[preceding-sibling::table[{dh}] or {dh}]'
-              '[{b_multi_doc}]'
-              '[{footer_multi_doc}]'
+            '[preceding-sibling::table[{dh}] or {dh}]'
+            '[{b_multi_doc}]'
+            '[{footer_multi_doc}]'
             '/tbody/tr'.format(
                 dh=docket_header,
                 b_multi_doc=bankr_multi_doc,
