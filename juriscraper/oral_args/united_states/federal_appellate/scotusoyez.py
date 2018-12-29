@@ -29,7 +29,7 @@ class Site(OralArgumentSite):
         download_urls = []
         for index, e in enumerate(self.html.xpath(path)):
             case_html = self._get_html_tree_by_url(e)
-            path = "//a[contains(concat(' ',@class,' '),' arg-link audio') and contains(., 'Download')]/@href"
+            path = "//a[contains(concat(' ',@class,' '),' arg-link audio') and contains(., 'Download')]/@href" # noqa
             urls = list(case_html.xpath(path))
             if len(urls) == 0:
                 download_urls.append('')
@@ -53,7 +53,7 @@ class Site(OralArgumentSite):
         return datetime.strptime(e, '%m/%d/%Y').date()
 
     def _get_docket_numbers(self):
-        path = "//td[contains(concat(' ',@class,' '),' views-field-field-argument-value')][contains(., '/')]/preceding-sibling::td[1]/text()"
+        path = "//td[contains(concat(' ',@class,' '),' views-field-field-argument-value')][contains(., '/')]/preceding-sibling::td[1]/text()" # noqa
         return map(self._return_docket_number, self.html.xpath(path))
 
     @staticmethod
