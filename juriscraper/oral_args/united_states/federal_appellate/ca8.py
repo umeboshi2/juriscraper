@@ -44,7 +44,8 @@ class Site(OralArgumentSite):
 
     def _get_case_dates(self):
         case_dates = []
-        for txt in [item.xpath('./description/text()')[0] for item in self.items]:
+        for txt in [item.xpath('./description/text()')[0]
+                    for item in self.items]:
             # I can't see it, but there's apparently whitespace or a newline
             # at the end of these dates that has to be removed or we error out.
             case_date = clean_if_py3(txt).split('about ', 1)[1].strip()

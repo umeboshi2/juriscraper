@@ -16,24 +16,23 @@ class Site(OralArgumentSite):
         super(Site, self).__init__(*args, **kwargs)
         self.court_id = self.__module__
         d = date.today()
-        #d = date(month=5, day=1, year=2014)
-        self.url = 'http://www.cadc.uscourts.gov/recordings/recordings.nsf/DocsByRDate?OpenView&count=100&SKey={yearmo}'.format(
-            yearmo=d.strftime('%Y%m')
-        )
-        self.back_scrape_iterable = ["%s%02d" % (year, month) for year in
-                                     range(2007, d.year + 1) for month in
-                                     range(1, 13)]
+        # d = date(month=5, day=1, year=2014)
+        tmpl = 'http://www.cadc.uscourts.gov/recordings/recordings.nsf/DocsByRDate?OpenView&count=100&SKey={yearmo}' # noqa
+        self.url = tmpl.format(yearmo=d.strftime('%Y%m'))
+        self.back_scrape_iterable = ["%s%02d" % (year, month)
+                                     for year in range(2007, d.year + 1)
+                                     for month in range(1, 13)]
 
     def _download(self, **kwargs):
         # The certificate on their site has expired.
         return super(Site, self)._download(request_dict={'verify': False})
 
     def _get_download_urls(self):
-        path = "id('ViewBody')//div[contains(concat(' ',@class,' '),' row-entry')]//@href"
+        path = "id('ViewBody')//div[contains(concat(' ',@class,' '),' row-entry')]//@href" # noqa
         return list(self.html.xpath(path))
 
     def _get_case_names(self):
-        path = "id('ViewBody')//*[contains(concat(' ',@class,' '),' column-two')]/div[1]/text()"
+        path = "id('ViewBody')//*[contains(concat(' ',@class,' '),' column-two')]/div[1]/text()" # noqa
         return list(self.html.xpath(path))
 
     def _get_case_dates(self):
@@ -46,7 +45,7 @@ class Site(OralArgumentSite):
         return datetime.strptime(e, '%m/%d/%Y').date()
 
     def _get_docket_numbers(self):
-        path = "id('ViewBody')//*[contains(concat(' ',@class,' '),' row-entry')]//a//text()"
+        path = "id('ViewBody')//*[contains(concat(' ',@class,' '),' row-entry')]//a//text()" # noqa
         return list(self.html.xpath(path))
 
     def _get_judges(self):
@@ -54,9 +53,6 @@ class Site(OralArgumentSite):
         return [' '.join(s.split()) for s in self.html.xpath(path)]
 
     def _download_backwards(self, yearmo):
-        self.url = 'http://www.cadc.uscourts.gov/recordings/recordings.nsf/DocsByRDate?OpenView&count=100&SKey={yearmo}'.format(
-            yearmo=yearmo,
-        )
+        tmpl = 'http://www.cadc.uscourts.gov/recordings/recordings.nsf/DocsByRDate?OpenView&count=100&SKey={yearmo}' # noqa
+        self.url = tmpl.format(yearmo=yearmo)
         self.html = self._download()
-
-

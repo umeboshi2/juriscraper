@@ -19,9 +19,8 @@ class Site(OralArgumentSite):
         super(Site, self).__init__(*args, **kwargs)
         self.court_id = self.__module__
         d = date.today()
-        self.url = 'http://www.cafc.uscourts.gov/oral-argument-recordings?field_date_value2[value][date]={date}'.format(
-            date=d.strftime('%Y-%m-%d')
-        )
+        tmpl = 'http://www.cafc.uscourts.gov/oral-argument-recordings?field_date_value2[value][date]={date}' # noqa
+        self.url = tmpl.format(date=d.strftime('%Y-%m-%d'))
         self.back_scrape_iterable = [i.date() for i in rrule(
             DAILY,
             interval=1,  # Every day
@@ -46,8 +45,6 @@ class Site(OralArgumentSite):
         return [s.strip() for s in self.html.xpath(path)]
 
     def _download_backwards(self, d):
-        self.url = self.url = 'http://www.cafc.uscourts.gov/oral-argument-recordings?field_date_value2[value][date]={date}'.format(
-                date=d.strftime('%Y-%m-%d')
-        )
+        tmpl = 'http://www.cafc.uscourts.gov/oral-argument-recordings?field_date_value2[value][date]={date}' # noqa
+        self.url = tmpl.format(date=d.strftime('%Y-%m-%d'))
         self.html = self._download()
-

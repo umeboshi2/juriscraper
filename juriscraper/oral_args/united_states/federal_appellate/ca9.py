@@ -84,12 +84,12 @@ class Site(OralArgumentSite):
             else:
                 # Goes to second page, grabs the link and returns it.
                 html_tree = self._get_html_tree_by_url(seed_url)
-                path_to_audio_file = "//*[@class='padboxauto_MediaContent']//a/@href"
+                path_to_audio_file = "//*[@class='padboxauto_MediaContent']//a/@href" # noqa
                 try:
                     url = html_tree.xpath(path_to_audio_file)[0]
                 except IndexError:
-                    # The URL wasn't found, so something is wrong and we'll have to
-                    # fix it in the _post_parse() method.
+                    # The URL wasn't found, so something is wrong and
+                    # we'll have to fix it in the _post_parse() method.
                     url = ''
                 return url
 
@@ -102,7 +102,7 @@ class Site(OralArgumentSite):
         the real links are posted.
         """
         row_path = "//tr[@class='dg_tr'][.//*[contains(@id, 'case_num')]]"
-        date_path = ".//*[contains(concat(' ',@id,' '),' mod_hearing_date')]/text()"
+        date_path = ".//*[contains(concat(' ',@id,' '),' mod_hearing_date')]/text()" # noqa
         docket_path = ".//*[contains(concat(' ',@id,' '),' case_num')]/text()"
         urls = []
         for row in self.html.xpath(row_path):
@@ -114,10 +114,9 @@ class Site(OralArgumentSite):
 
     @staticmethod
     def _return_download_url(d, docket_string):
-        link = "http://cdn.ca9.uscourts.gov/datastore/media/{date}/{docket_nr}.wma".format(
-            date=d.strftime('%Y/%m/%d'),
-            docket_nr=docket_string,
-        )
+        tmpl = "http://cdn.ca9.uscourts.gov/datastore/media/{date}/{docket_nr}.wma" # noqa
+        link = tmpl.format(date=d.strftime('%Y/%m/%d'),
+                           docket_nr=docket_string)
         return link
 
     def _get_case_names(self):

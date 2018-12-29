@@ -21,10 +21,11 @@ class Site(OralArgumentSite):
     def __init__(self, *args, **kwargs):
         super(Site, self).__init__(*args, **kwargs)
         self.court_id = self.__module__
-        self.url = 'http://www.opn.ca6.uscourts.gov/internet/court_audio/aud1.php'
+        self.url = 'http://www.opn.ca6.uscourts.gov/internet/court_audio/aud1.php' # noqa
         self.xpath_root = '//table[@class="views-table cols-3"]'
-        self.regex = re.compile('((?:\d{2}[- ]\d{4}\s*)+)(.*)')
-        self.back_scrape_iterable = ['nothing']  # Just a placeholder for this court
+        self.regex = re.compiler(r'((?:\d{2}[- ]\d{4}\s*)+)(.*)')
+        # Just a placeholder for this court
+        self.back_scrape_iterable = ['nothing']
         self.backscrape = False
 
     def _get_download_urls(self):
@@ -97,7 +98,7 @@ class Site(OralArgumentSite):
         self.backscrape = True
         self.method = 'POST'
         self.xpath_root = '//table'
-        self.url = 'http://www.opn.ca6.uscourts.gov/internet/court_audio/audSearchRes.php'
+        self.url = 'http://www.opn.ca6.uscourts.gov/internet/court_audio/audSearchRes.php' # noqa
         self.parameters = {
             'caseNumber': "",
             'shortTitle': "",

@@ -39,9 +39,11 @@ class Site(OralArgumentSite):
         path = '//item/description/b/text()'
         dates = []
         for t in self.html.xpath(path):
-            # t looks like: [Argued:91-1-2015]
-            t = re.sub(r'[\[\]\s]', '', t)             # Strip out [ and ].
-            date_string = clean_if_py3(t).split(':', 1)[1].strip()  # Then get the date part.
+            # t looks like: [Argued:91-1-2015],
+            # so we, strip out "[" and "]",
+            t = re.sub(r'[\[\]\s]', '', t)
+            date_string = clean_if_py3(t).split(':', 1)[1].strip()
+            # Then get the date part.
             dates.append(datetime.strptime(date_string, '%m-%d-%Y').date())
         return dates
 

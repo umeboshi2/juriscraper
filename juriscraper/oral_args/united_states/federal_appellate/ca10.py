@@ -13,7 +13,7 @@ class Site(OralArgumentSite):
     def __init__(self, *args, **kwargs):
         super(Site, self).__init__(*args, **kwargs)
         self.court_id = self.__module__
-        self.url = 'https://www.ca10.uscourts.gov/clerk/oral-argument-recordings'
+        self.url = 'https://www.ca10.uscourts.gov/clerk/oral-argument-recordings' # noqa
         self.back_scrape_iterable = [1, 2, 3]
         self._anchor_nodes = None
 
@@ -42,14 +42,14 @@ class Site(OralArgumentSite):
 
         Examples: [
             '17-2085, United States v. Roach, Appellant',
-            '17-7042 & 17-7044, The Cherokee Nation v. Zinke, et al., Appellants',
+            '17-7042 & 17-7044, The Cherokee Nation v. Zinke, et al., Appellants', # noqa
             '17-2027, 17-2035, United States v. Solis, Appellant',
         ]
 
         :return tuple of docket numbers & case name
         """
         # Make the docket number optional. Sometimes it's missing.
-        regex = re.compile('(?:(.*\d\d-\d{1,4}), )?(.*)')
+        regex = re.compile(r'(?:(.*\d\d-\d{1,4}), )?(.*)')
         results = regex.search(s)
         docket_number = results.group(1)
         case_name = results.group(2)
@@ -82,5 +82,5 @@ class Site(OralArgumentSite):
         return dates
 
     def _download_backwards(self, i):
-        self.url = 'https://www.ca10.uscourts.gov/clerk/oral-argument-recordings?page=%s' % i
+        self.url = 'https://www.ca10.uscourts.gov/clerk/oral-argument-recordings?page=%s' % i # noqa
         self.html = self._download()

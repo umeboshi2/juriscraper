@@ -5,7 +5,7 @@ Author: MLR
 Reviewer: MLR
 History:
   2016-09-09: Created by MLR
-"""
+""" # noqa
 
 from lxml import html
 

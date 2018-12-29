@@ -50,10 +50,9 @@ class Site(OralArgumentSite):
                 .replace("CONS. WITH", "\n")
                 .replace("CONSOLIDATED WITH", "\n")
                 .split())
-            for d in self.html.xpath(path)]
+                for d in self.html.xpath(path)]
 
     def _download_backwards(self, i):
-        self.url = 'http://www.ca11.uscourts.gov/oral-argument-recordings?page={i}'.format(
-            i=i,
-        )
+        tmpl = 'http://www.ca11.uscourts.gov/oral-argument-recordings?page={}'
+        self.url = tmpl.format(i)
         self.html = self._download()

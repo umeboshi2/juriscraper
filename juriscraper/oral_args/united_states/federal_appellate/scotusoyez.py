@@ -25,7 +25,7 @@ class Site(OralArgumentSite):
         self.extender = {}
 
     def _get_download_urls(self):
-        path = "//td[contains(concat(' ',@class,' '),' views-field-field-argument-value')][contains(., '/')]/preceding-sibling::td[2]/a/@href"
+        path = "//td[contains(concat(' ',@class,' '),' views-field-field-argument-value')][contains(., '/')]/preceding-sibling::td[2]/a/@href" # noqa
         download_urls = []
         for index, e in enumerate(self.html.xpath(path)):
             case_html = self._get_html_tree_by_url(e)
@@ -40,11 +40,11 @@ class Site(OralArgumentSite):
         return download_urls
 
     def _get_case_names(self):
-        path = "//td[contains(concat(' ',@class,' '),' views-field-field-argument-value')][contains(., '/')]/preceding-sibling::td[2]/a/text()"
+        path = "//td[contains(concat(' ',@class,' '),' views-field-field-argument-value')][contains(., '/')]/preceding-sibling::td[2]/a/text()" # noqa
         return list(self.html.xpath(path))
 
     def _get_case_dates(self):
-        path = "//td[contains(concat(' ',@class,' '),' views-field-field-argument-value')][contains(., '/')]/span/text()"
+        path = "//td[contains(concat(' ',@class,' '),' views-field-field-argument-value')][contains(., '/')]/span/text()" # noqa
         return map(self._return_case_date, self.html.xpath(path))
 
     @staticmethod

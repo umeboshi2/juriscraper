@@ -13,7 +13,7 @@ class Site(OralArgumentSite):
     def __init__(self, *args, **kwargs):
         super(Site, self).__init__(*args, **kwargs)
         self.court_id = self.__module__
-        self.url = 'http://www.ca4.uscourts.gov/oral-argument/listen-to-oral-arguments'
+        self.url = 'http://www.ca4.uscourts.gov/oral-argument/listen-to-oral-arguments' # noqa
 
     def _get_download_urls(self):
         return [href for href in self.html.xpath('//tr/td[2]//a/@href')]
@@ -31,4 +31,5 @@ class Site(OralArgumentSite):
         return self.text_from_cell(2)
 
     def text_from_cell(self, cell_number):
-        return [cell.text_content().strip() for cell in self.html.xpath('//tr/td[%d]' % cell_number)]
+        return [cell.text_content().strip()
+                for cell in self.html.xpath('//tr/td[%d]' % cell_number)]
