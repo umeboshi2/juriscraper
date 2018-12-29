@@ -99,7 +99,8 @@ class Site(OralArgumentSite):
             modifies aspects of the Site object's attributes such as Site.url.
 
             A simple example has been provided below. The idea is that the
-            caller runs this method with a different variable on each iteration.
+            caller runs this method with a different variable on each
+            iteration.
             That variable is often a date that is getting iterated or is simply
             a index (i), that we iterate upon.
 
