@@ -1,3 +1,4 @@
+from __future__ import print_function
 import signal
 import six
 import sys
@@ -40,13 +41,17 @@ def scrape_court(site, binaries=False):
     """
     for item in site:
         # Percent encode URLs (this is a Python wart)
-        download_url = six_parse.quote(item['download_urls'], safe="%/:=&?~#+!$,;'@()*[]")
+        download_url = six_parse.quote(item['download_urls'],
+                                       safe="%/:=&?~#+!$,;'@()*[]")
 
         if binaries:
             try:
                 opener = six_request.build_opener()
                 for cookie_dict in site.cookies:
-                    opener.addheaders.append(("Cookie", "%s=%s" % (cookie_dict['name'], cookie_dict['value'])))
+                    cktuple = ("Cookie",
+                               "{name}={value}".format(**cookie_dict))
+                    opener.addheaders.append(cktuple)
+
                 data = opener.open(download_url).read()
                 # test for empty files (thank you CA1)
                 if len(data) == 0:
@@ -73,10 +78,12 @@ def scrape_court(site, binaries=False):
                 # Dates and such...
                 v_print(1, '    %s: %s' % (k, v))
 
-    v_print(3, '\n%s: Successfully crawled %d items.' % (site.court_id, len(site)))
+    v_print(3, '\n%s: Successfully crawled %d items.' % (site.court_id, len(site)))  # noqa: E501
 
 
 v_print = None
+
+
 def main():
     global die_now
 
@@ -85,22 +92,23 @@ def main():
 
     usage = ('usage: %prog -c COURTID [-d|--daemon] [-b|--binaries]\n\n'
              'To test ca1, downloading binaries, use: \n'
-             '    python %prog -c opinions.united_states.federal_appellate.ca1 -b\n\n'
+             '    python %prog -c opinions.united_states.federal_appellate.ca1 -b\n\n'  # noqa: E501
              'To test all federal courts, omitting binaries, use: \n'
              '    python %prog -c opinions.united_states.federal_appellate')
     parser = OptionParser(usage)
     parser.add_option('-c', '--courts', dest='court_id', metavar="COURTID",
-                      help=('The court(s) to scrape and extract. This should be in '
-                            'the form of a python module or package import '
-                            'from the Juriscraper library, e.g. '
-                            '"juriscraper.opinions.united_states.federal.ca1" or '
-                            'simply "opinions" to do all opinions. If desired, '
-                            'you can use slashes instead of dots to separate'
-                            'the import path.'))
+                      help=('The court(s) to scrape and extract. This should '
+                            'be in the form of a python module or package '
+                            'import from the Juriscraper library, e.g. '
+                            '"juriscraper.opinions.united_states.federal.ca1" '
+                            ' or simply "opinions" to do all opinions. '
+                            'If desired, you can use slashes instead of dots '
+                            'to separate the import path.'))
     parser.add_option('-d', '--daemon', action="store_true", dest='daemonmode',
-                      default=False, help=('Use this flag to turn on daemon '
-                                           'mode, in which all courts requested '
-                                           'will be scraped in turn, non-stop.'))
+                      default=False,
+                      help=('Use this flag to turn on daemon '
+                            'mode, in which all courts requested '
+                            'will be scraped in turn, non-stop.'))
     parser.add_option('-b', '--download_binaries', action='store_true',
                       dest='binaries',
                       default=False,
@@ -110,12 +118,12 @@ def main():
                       '--verbosity',
                       action='count',
                       default=1,
-                      help='Increase output verbosity (e.g., -vv is more than -v).')
+                      help='Increase output verbosity (e.g., -vv is more than -v).')  # noqa: E501
     parser.add_option('--backscrape',
                       dest='backscrape',
                       action='store_true',
                       default=False,
-                      help='Download the historical corpus using the _download_backwards method.')
+                      help='Download the historical corpus using the _download_backwards method.')  # noqa: E501
 
     (options, args) = parser.parse_args()
 
@@ -126,6 +134,7 @@ def main():
 
     # Set up the print function
     print("Verbosity is set to: %s" % options.verbosity)
+
     def _v_print(*verb_args):
         if verb_args[0] > (3 - options.verbosity):
             print(verb_args[1])
@@ -162,19 +171,20 @@ def main():
                              [module])
             try:
                 if backscrape:
-                    for site in site_yielder(mod.Site().back_scrape_iterable, mod):
+                    for site in site_yielder(
+                            mod.Site().back_scrape_iterable, mod):
                         site.parse()
                         scrape_court(site, binaries)
                 else:
                     site = mod.Site()
-                    v_print(3, 'Sent %s request to: %s' % (site.method, site.url))
+                    v_print(3, 'Sent %s request to: %s' % (site.method, site.url))  # noqa: E501
                     if site.uses_selenium:
                         v_print(3, "Selenium will be used.")
                     site.parse()
                     scrape_court(site, binaries)
             except Exception:
                 v_print(3, '*************!! CRAWLER DOWN !!****************')
-                v_print(3, '*****scrape_court method failed on mod: %s*****' % module_strings[i])
+                v_print(3, '*****scrape_court method failed on mod: %s*****' % module_strings[i])  # noqa: E501
                 v_print(3, '*************!! ACTION NEEDED !!***************')
                 v_print(3, traceback.format_exc())
                 i += 1
@@ -188,6 +198,7 @@ def main():
 
     v_print(3, 'The scraper has stopped.')
     sys.exit(0)
+
 
 if __name__ == '__main__':
     main()

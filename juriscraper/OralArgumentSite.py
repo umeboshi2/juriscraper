@@ -11,10 +11,11 @@ class OralArgumentSite(AbstractSite):
     def __init__(self, *args, **kwargs):
         super(OralArgumentSite, self).__init__(*args, **kwargs)
 
-        self._opt_attrs = ['docket_numbers', 'judges', 'case_name_shorts',]
+        self._opt_attrs = ['docket_numbers', 'judges', 'case_name_shorts']
         self._req_attrs = ['case_dates', 'case_names', 'download_urls',
-                           'blocked_statuses',]
-        # For date sorting to work, case_dates must be the first item in _all_attrs.
+                           'blocked_statuses']
+        # For date sorting to work, case_dates must be the first item
+        # in _all_attrs.
         self._all_attrs = self._req_attrs + self._opt_attrs
 
         # Set all metadata to None
@@ -22,7 +23,8 @@ class OralArgumentSite(AbstractSite):
             self.__setattr__(attr, None)
 
     def _get_download_urls(self):
-        raise NotImplementedError('`_get_download_urls()` must be implemented.')
+        raise NotImplementedError(
+            '`_get_download_urls()` must be implemented.')
 
     def _get_case_dates(self):
         raise NotImplementedError('`_get_case_dates()` must be implemented.')

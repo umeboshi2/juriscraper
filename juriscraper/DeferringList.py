@@ -35,7 +35,8 @@ class DeferringList(object):
             return self._data[item]
         else:
             # Go get the item using the fetching function
-            logger.info("Getting deferred value from seed: %s" % self._data[item])
+            logger.info(
+                "Getting deferred value from seed: %s" % self._data[item])
             new_val = self._fetching_function(self._data[item])
             self._data[item] = new_val
             self._fetched_items[item] = True
@@ -45,7 +46,8 @@ class DeferringList(object):
         if self._fetched_items[key]:
             self._data[key] = value
         else:
-            raise AttributeError('Cannot set item that has not yet been fetched.')
+            errmsg = 'Cannot set item that has not yet been fetched.'
+            raise AttributeError(errmsg)
 
     def __delitem__(self, item):
         del self._data[item]
@@ -56,7 +58,3 @@ class DeferringList(object):
 
     def __str__(self):
         return "<DeferringList %s>" % self.__dict__
-
-
-
-

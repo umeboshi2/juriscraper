@@ -23,7 +23,7 @@ class OpinionSite(AbstractSite):
         ]
         self._req_attrs = ['case_dates', 'case_names', 'download_urls',
                            'precedential_statuses', 'blocked_statuses',
-                           'date_filed_is_approximate',]
+                           'date_filed_is_approximate']
         # For date sorting to work, case_dates must be first in _all_attrs.
         self._all_attrs = self._req_attrs + self._opt_attrs
 
@@ -36,7 +36,8 @@ class OpinionSite(AbstractSite):
         return None
 
     def _get_download_urls(self):
-        raise NotImplementedError('`_get_download_urls()` must be implemented.')
+        raise NotImplementedError(
+            '`_get_download_urls()` must be implemented.')
 
     def _get_case_dates(self):
         raise NotImplementedError('`_get_case_dates()` must be implemented.')
@@ -81,7 +82,8 @@ class OpinionSite(AbstractSite):
         return None
 
     def _get_precedential_statuses(self):
-        raise NotImplementedError('`_get_precedential_statuses()` must be implemented.')
+        raise NotImplementedError(
+            '`_get_precedential_statuses()` must be implemented.')
 
     def _get_summaries(self):
         return None

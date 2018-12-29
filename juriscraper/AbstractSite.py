@@ -29,10 +29,11 @@ if os.path.isfile(_legacy_path) and os.access(_legacy_path, os.X_OK):
 
 
 class AbstractSite(object):
-    """Contains generic methods for scraping data. Should be extended by all
-    scrapers.
+    """Contains generic methods for scraping data.
+    Should be extended by all scrapers.
 
-    Should not contain lists that can't be sorted by the _date_sort function."""
+    Should not contain lists that can't be
+    sorted by the _date_sort function."""
 
     def __init__(self, cnt=None):
         super(AbstractSite, self).__init__()
@@ -113,7 +114,8 @@ class AbstractSite(object):
         if 'case_name_shorts' in self._all_attrs:
             # This needs to be done *after* _clean_attributes() has been run.
             # The current architecture means this gets run twice. Once when we
-            # iterate over _all_attrs, and again here. It's pretty cheap though.
+            # iterate over _all_attrs, and again here.
+            # It's pretty cheap though.
             self.case_name_shorts = self._get_case_name_shorts()
         self._post_parse()
         self._check_sanity()
@@ -184,14 +186,18 @@ class AbstractSite(object):
         values = list(lengths.values())
         if values.count(values[0]) != len(values):
             # Are all elements equal?
-            raise InsanityException("%s: Scraped meta data fields have differing"
-                                    " lengths: %s" % (self.court_id, lengths))
+            raise InsanityException(
+                "%s: Scraped meta data fields have differing"
+                " lengths: %s" % (self.court_id, lengths)
+            )
         if len(self.case_names) == 0:
             logger.warning('%s: Returned with zero items.' % self.court_id)
         else:
             for field in self._req_attrs:
                 if self.__getattribute__(field) is None:
-                    raise InsanityException('%s: Required fields do not contain any data: %s' % (self.court_id, field))
+                    tmpl = '%s: Required fields do not contain any data: %s'
+                    msg = tmpl % (self.court_id, field)
+                    raise InsanityException(msg)
             i = 0
             prior_case_name = None
             for name in self.case_names:
@@ -215,7 +221,7 @@ class AbstractSite(object):
             if fixed_date != case_date:
                 logger.info(
                     "Date year typo detected. Converting %s to %s "
-                    "for case '%s' in %s" % (case_date, fixed_date, self.case_names[index], self.court_id)
+                    "for case '%s' in %s" % (case_date, fixed_date, self.case_names[index], self.court_id)  # noqa: E501
                 )
                 case_date = fixed_date
                 self.case_dates[index] = fixed_date
@@ -229,8 +235,10 @@ class AbstractSite(object):
         if type(self.cookies) != dict:
             raise InsanityException('self.cookies not set to be a dict by '
                                     'scraper.')
-        logger.info("%s: Successfully found %s items." % (self.court_id,
-                                                          len(self.case_names)))
+        logger.info(
+            "%s: Successfully found %s items." % (self.court_id,
+                                                  len(self.case_names))
+        )
 
     def _date_sort(self):
         """ Sort the object by date.
@@ -258,8 +266,8 @@ class AbstractSite(object):
         """Hook for returning a custom HTTPAdapter
 
         This function allows subclasses to do things like explicitly set
-        specific SSL configurations when being called. Certain courts don't work
-        unless you specify older versions of SSL.
+        specific SSL configurations when being called. Certain courts
+        don't work unless you specify older versions of SSL.
         """
         return HTTPAdapter()
 
@@ -267,9 +275,9 @@ class AbstractSite(object):
         """Hook for custom HTML parsers
 
         By default, the etree.html parser is used, but this allows support for
-        other parsers like the html5parser or even BeautifulSoup, if it's called
-        for (example: return get_html5_parsed_text(text)). Otherwise, this method
-        can be overwritten to execute custom parsing logic.
+        other parsers like the html5parser or even BeautifulSoup, if it's
+        called for (example: return get_html5_parsed_text(text)). Otherwise,
+        this method can be overwritten to execute custom parsing logic.
         """
         return get_html_parsed_text(text)
 
@@ -280,7 +288,9 @@ class AbstractSite(object):
             truncated_params = {}
             for k, v in self.parameters.items():
                 truncated_params[k] = trunc(v, 50, ellipsis='...[truncated]')
-            logger.info("Now downloading case page at: %s (params: %s)" % (self.url, truncated_params))
+            logger.info(
+                "Now downloading case page at: %s (params: %s)" % (self.url, truncated_params)  # noqa: E501
+            )
         else:
             logger.info("Now downloading case page at: %s" % self.url)
         self._process_request_parameters(request_dict)
@@ -315,7 +325,8 @@ class AbstractSite(object):
         )
 
     def _request_url_post(self, url):
-        """Execute POST request and assign appropriate request dictionary values"""
+        """Execute POST request and assign appropriate
+        request dictionary values"""
         self.request['url'] = url
         self.request['response'] = self.request['session'].post(
             url,
@@ -338,14 +349,15 @@ class AbstractSite(object):
         set_response_encoding(self.request['response'])
 
     def _return_response_text_object(self):
-        if self.request['response']:
-            if 'json' in self.request['response'].headers.get('content-type', ''):
-                return self.request['response'].json()
+        response = self.request['response']
+        if response:
+            if 'json' in response.headers.get('content-type', ''):
+                return response.json()
             else:
                 if six.PY2:
-                    payload = self.request['response'].text
+                    payload = response.text
                 else:
-                    payload = str(self.request['response'].content)
+                    payload = str(response.content)
 
                 text = self._clean_text(payload)
                 html_tree = self._make_html_tree(text)
