@@ -42,7 +42,8 @@ judge_normalizers = {
     'Magistrate Judge Magistrate': 'mag',
     'Magistrate Judge Magistrate Judge': 'mag',
 
-    # Chief Magistrate (normalize to magistrate for now, due to low sample size)
+    # Chief Magistrate
+    # (normalize to magistrate for now, due to low sample size)
     'Chief Magistrate': 'mag',
     'Chief Magistrate Judge': 'mag',
 

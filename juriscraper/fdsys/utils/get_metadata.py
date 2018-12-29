@@ -84,7 +84,7 @@ def print_xpath_results():
     for f in glob.glob('../examples/*.xml'):
         tree = etree.parse(f)
         rough_data = {
-            'download_url': xpath(tree, "(//m:identifier[@type='uri'])[1]/text()"),
+            'download_url': xpath(tree, "(//m:identifier[@type='uri'])[1]/text()"),  # noqa: E501
             'fdsys_id': xpath(tree, "(//m:accessId/text())[1]"),
             'court_id': get_court_id(xpath(tree, "(//m:courtCode/text())[1]")),
             'docket_number': xpath(tree, "(//m:caseNumber/text())[1]"),
@@ -111,11 +111,9 @@ def get_fdsys_court_names():
     tree = etree.parse(response[0])
     # print(etree.tostring(tree, pretty_print=True))
     data = dict()
-
-    for url in tree.xpath("//m:loc/text()", namespaces={
-            'm': 'http://www.sitemaps.org/schemas/sitemap/0.9',
-            'xlink': 'http://www.w3.org/1999/xlink',
-        }):
+    namespaces = dict(m='http://www.sitemaps.org/schemas/sitemap/0.9',
+                      xlink='http://www.w3.org/1999/xlink')
+    for url in tree.xpath("//m:loc/text()", namespaces=namespaces):
         pre = url.split('-')[1]
         # if pre not in data and url:
         data[pre] = url

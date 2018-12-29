@@ -43,8 +43,8 @@ def get_closest_match_index(word, possibilities):
 
     :param word: The string to match to.
     :param possibilities: A list of possible matches.
-    :return: The index of the closest matching possibility, if any. Else, return
-    None.
+    :return: The index of the closest matching possibility, if any.
+    Else, return None.
     """
     word = normalize_phrase(word)
     possibilities = [normalize_phrase(x) for x in possibilities]

@@ -64,7 +64,7 @@ def get_visible_text(html_content):
     text = html_tree.xpath("""//text()[normalize-space() and not(parent::style |
                                                                  parent::link |
                                                                  parent::head |
-                                                                 parent::script)]""")
+                                                                 parent::script)]""")  # noqa: E501
     return " ".join(text)
 
 

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# flake8: noqa
 """
 Python 2.x Regular Express patterns for string_utils.py
 """

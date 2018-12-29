@@ -2,7 +2,6 @@
 import glob
 import json
 from collections import defaultdict
-from pprint import pprint
 
 import re
 import requests
@@ -67,7 +66,7 @@ class FDSysModsContent(object):
             self.__setattr__(attr, getattr(self, '_get_%s' % attr)())
 
     def _get_download_url(self):
-        return ''.join(xpath(self.tree, "(//m:identifier[@type='uri'])[1]/text()")).strip()
+        return ''.join(xpath(self.tree, "(//m:identifier[@type='uri'])[1]/text()")).strip()  # noqa: E501
 
     def _get_fdsys_id(self):
         return ''.join(xpath(self.tree, "(//m:accessId/text())[1]"))
@@ -112,9 +111,9 @@ class FDSysModsContent(object):
                     ).split()
                               )
         return {
-            'download_url': ''.join(xpath(document_node, './m:relatedItem/@xlink:href')).strip(),
+            'download_url': ''.join(xpath(document_node, './m:relatedItem/@xlink:href')).strip(),  # noqa: E501
             'description': desription,
-            'date_filed': ''.join(xpath(document_node, './m:originInfo/m:dateIssued/text()')),
+            'date_filed': ''.join(xpath(document_node, './m:originInfo/m:dateIssued/text()')),  # noqa: E501
             # 'type': self._get_document_type(desription),
             'number': ''.join(xpath(document_node, './/m:partNumber/text()')),
         }
@@ -141,7 +140,7 @@ class FDSysSite(AbstractSite):
     def __init__(self, *args, **kwargs):
         super(FDSysSite, self).__init__(*args, **kwargs)
         current_year = date.today().year
-        self.base_url = "https://www.gpo.gov/smap/fdsys/sitemap_{year}/{year}_USCOURTS_sitemap.xml"
+        self.base_url = "https://www.gpo.gov/smap/fdsys/sitemap_{year}/{year}_USCOURTS_sitemap.xml"  # noqa: E501
         self.url = self.base_url.format(year=current_year)
         self.back_scrape_iterable = range(1982, current_year + 1)
 
@@ -192,7 +191,8 @@ class FDSysSite(AbstractSite):
 
 def get_court_locations_list():
     """
-    parses the examples directories and gets the court ids and the court locations
+    parses the examples directories and gets the court ids and the
+    court locations
     """
     court_locations_list = defaultdict(set)
     # parse all the example files
@@ -212,7 +212,7 @@ def get_court_locations_list():
 
 
 def get_the_first_5_words():
-    l = defaultdict(list)
+    ls = defaultdict(list)
     p = defaultdict(list)
     word_counter = defaultdict(int)
     for f in glob.glob('./examples/*/*.xml'):
@@ -233,20 +233,21 @@ def get_the_first_5_words():
                 if w:
                     word_counter[w] += 1
                 ws.append(w)
-            l[f.__repr__()].append(ws)
+            ls[f.__repr__()].append(ws)
             p[f.__repr__()].append(" ".join(words_to_use))
 
     with open('first_8_words_string.json', 'w') as pc:
         json.dump(p, pc)
 
     with open('first_five_words.json', 'w') as j:
-        json.dump(l, j)
+        json.dump(ls, j)
 
     with open('first_five_words_counter.json', 'w') as c:
         json.dump(word_counter, c)
 
 
 if __name__ == '__main__':
+    # from pprint import pprint
     # get_court_locations_list()
     get_the_first_5_words()
     # for f in glob.glob('./examples/*/*.xml'):

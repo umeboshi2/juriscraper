@@ -1,7 +1,6 @@
-from pprint import pprint
+import json
 
 import requests
-import json
 from lxml import etree, html
 
 
@@ -22,15 +21,14 @@ def get_court_names():
 
 
 def get_fdsys_court_names():
-    response = requests.get("https://www.gpo.gov/smap/fdsys/sitemap_2014/2014_USCOURTS_sitemap.xml", stream=True)
+    response = requests.get("https://www.gpo.gov/smap/fdsys/sitemap_2014/2014_USCOURTS_sitemap.xml", stream=True)  # noqa: E501
     response.raw.decode_content = True
     tree = etree.parse(response.raw)
     data = dict()
 
-    for url in tree.xpath("//m:loc/text()", namespaces={
-            'm': 'http://www.sitemaps.org/schemas/sitemap/0.9',
-            'xlink': 'http://www.w3.org/1999/xlink',
-        }):
+    namespaces = dict(m='http://www.sitemaps.org/schemas/sitemap/0.9',
+                      xlink='http://www.w3.org/1999/xlink')
+    for url in tree.xpath("//m:loc/text()", namespaces=namespaces):
         pre = url.split('-')[1]
         # if pre not in data and url:
         data[pre] = url

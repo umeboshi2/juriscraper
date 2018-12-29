@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from math import ceil
 
-from datetime import date
 from dateutil.parser import _timelex, parser, parserinfo
 from dateutil.rrule import DAILY, rrule
 from six.moves import zip_longest
@@ -19,12 +18,10 @@ MISSPELLINGS = {
     'Term': '1',
 }
 
-json_date_handler = lambda obj: (
-    obj.isoformat()
-    if isinstance(obj, datetime.datetime)
-    or isinstance(obj, datetime.date)
-    else None
-)
+
+def json_date_handler(obj):
+    if isinstance(obj, datetime.datetime) or isinstance(obj, datetime.date):
+        return obj.isoformat()
 
 
 class BetterInfo(parserinfo):
@@ -112,23 +109,23 @@ def parse_dates(s, debug=False, sane_start=datetime.datetime(1750, 1, 1),
 
     # Ditch unicode (_timelex() flips out on unicode if the system has
     # cStringIO installed -- the default)
-    #if isinstance(s, six.text_type):
-    #    s = s.encode('ascii', 'ignore')
+    # if isinstance(s, six.text_type):
+    #     s = s.encode('ascii', 'ignore')
 
     # Fix misspellings
     for i, j in MISSPELLINGS.items():
         s = s.replace(i, j)
 
-
     # Default is set to Christmas, 1600.
     DEFAULT = datetime.datetime(1600, 12, 25)
     dates = []
     for item in timesplit(s):
-        #print("Found:", item)
+        # print("Found:", item)
         try:
             d = p.parse(item, default=DEFAULT)
             hit_default_year = (d.year == DEFAULT.year)
-            hit_default_day_and_month = (d.month == DEFAULT.month and d.day == DEFAULT.day)
+            hit_default_day_and_month = (d.month == DEFAULT.month
+                                         and d.day == DEFAULT.day)
             if not any([hit_default_year, hit_default_day_and_month]):
                 if debug:
                     print("Item %s parsed as: %s" % (item, d))
@@ -164,7 +161,8 @@ def is_first_month_in_quarter(month):
 def fix_future_year_typo(future_date):
     """Fix current year typo, convert 2106 to 2016 in year 2016"""
     current_year = str(datetime.date.today().year)
-    transposed_year = current_year[0] + current_year[2] + current_year[1] + current_year[3]
+    transposed_year = current_year[0] + current_year[2]
+    transposed_year += current_year[1] + current_year[3]
     if transposed_year == str(future_date.year):
         return datetime.date(int(current_year), future_date.month,
                              future_date.day)
@@ -195,6 +193,6 @@ def make_date_range_tuples(start, end, gap):
     start_dates = [d.date() for d in rrule(DAILY, interval=gap, dtstart=start,
                                            until=end)]
     end_start = start + datetime.timedelta(days=gap - 1)
-    end_dates = [d.date() for d in rrule(DAILY, interval=gap, dtstart=end_start,
-                                         until=end)]
+    end_dates = [d.date() for d in rrule(DAILY, interval=gap,
+                                         dtstart=end_start, until=end)]
     return list(zip_longest(start_dates, end_dates, fillvalue=end))
