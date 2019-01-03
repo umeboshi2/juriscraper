@@ -29,6 +29,8 @@ Some of the design goals for this project are:
 -  Mime type identification through magic numbers
 -  Generalized architecture with minimal code repetition
 -  XPath-based scraping powered by lxml's html parser
+-  CSS Selector based scraping, also using lxml and `cssselect
+   <https://github.com/scrapy/cssselect/>`__ 
 -  return all meta data available on court websites (caller can pick
    what it needs)
 -  no need for a database
